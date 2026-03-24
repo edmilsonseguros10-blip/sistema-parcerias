@@ -205,89 +205,87 @@
     </div>
 
     <script>
-            async function cadastrar() {
-              const name = document.getElementById("name").value;
-              const email = document.getElementById("email").value;
-              const phone = document.getElementById("phone").value;
-              const cpf = document.getElementById("cpf").value;
-              const pix_key = document.getElementById("pix_key").value;
-              const password = document.getElementById("password").value;
-              const confirm_password =
-                document.getElementById("confirm_password").value;
+      async function cadastrar() {
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const phone = document.getElementById("phone").value;
+        const cpf = document.getElementById("cpf").value;
+        const pix_key = document.getElementById("pix_key").value;
+        const password = document.getElementById("password").value;
+        const confirm_password =
+          document.getElementById("confirm_password").value;
 
-              const errorDiv = document.getElementById("error");
-              const successDiv = document.getElementById("success");
+        const errorDiv = document.getElementById("error");
+        const successDiv = document.getElementById("success");
 
-              errorDiv.style.display = "none";
-              successDiv.style.display = "none";
+        errorDiv.style.display = "none";
+        successDiv.style.display = "none";
 
-              if (!name || !email || !phone || !cpf || !pix_key || !password) {
-                errorDiv.textContent = "Preencha todos os campos obrigatórios";
-                errorDiv.style.display = "block";
-                return;
-              }
+        if (!name || !email || !phone || !cpf || !pix_key || !password) {
+          errorDiv.textContent = "Preencha todos os campos obrigatórios";
+          errorDiv.style.display = "block";
+          return;
+        }
 
-              if (password !== confirm_password) {
-                errorDiv.textContent = "As senhas não coincidem";
-                errorDiv.style.display = "block";
-                return;
-              }
+        if (password !== confirm_password) {
+          errorDiv.textContent = "As senhas não coincidem";
+          errorDiv.style.display = "block";
+          return;
+        }
 
-              if (password.length < 6) {
-                errorDiv.textContent = "A senha deve ter pelo menos 6 caracteres";
-                errorDiv.style.display = "block";
-                return;
-              }
+        if (password.length < 6) {
+          errorDiv.textContent = "A senha deve ter pelo menos 6 caracteres";
+          errorDiv.style.display = "block";
+          return;
+        }
 
-              try {
-                const response = await const apiUrl = window.location.hostname === 'localhost'
-          ? 'http://localhost:3001/api/auth/register'
-          : 'https://sistema-parcerias-hczl.onrender.com/api/auth/register';
+        try {
+          // Usa a mesma origem do site (funciona localmente e no Render)
+          const apiUrl = window.location.origin + "/api/auth/register";
 
-      fetch(apiUrl, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                      name,
-                      email,
-                      phone,
-                      cpf,
-                      pix_key,
-                      password,
-                    }),
-                  },
-                );
+          const response = await fetch(apiUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name,
+              email,
+              phone,
+              cpf,
+              pix_key,
+              password,
+            }),
+          });
 
-                const data = await response.json();
+          const data = await response.json();
 
-                if (response.ok) {
-                  successDiv.textContent =
-                    "✅ Cadastro realizado com sucesso! Faça login para acessar sua área.";
-                  successDiv.style.display = "block";
+          if (response.ok) {
+            successDiv.textContent =
+              "✅ Cadastro realizado com sucesso! Faça login para acessar sua área.";
+            successDiv.style.display = "block";
 
-                  // Limpar formulário
-                  document.getElementById("name").value = "";
-                  document.getElementById("email").value = "";
-                  document.getElementById("phone").value = "";
-                  document.getElementById("cpf").value = "";
-                  document.getElementById("pix_key").value = "";
-                  document.getElementById("password").value = "";
-                  document.getElementById("confirm_password").value = "";
+            // Limpar formulário
+            document.getElementById("name").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("phone").value = "";
+            document.getElementById("cpf").value = "";
+            document.getElementById("pix_key").value = "";
+            document.getElementById("password").value = "";
+            document.getElementById("confirm_password").value = "";
 
-                  // Redirecionar após 3 segundos
-                  setTimeout(() => {
-                    window.location.href = "index.html";
-                  }, 3000);
-                } else {
-                  errorDiv.textContent = data.error || "Erro ao cadastrar";
-                  errorDiv.style.display = "block";
-                }
-              } catch (err) {
-                errorDiv.textContent =
-                  "Erro de conexão com o servidor. Verifique se o backend está rodando.";
-                errorDiv.style.display = "block";
-              }
-            }
+            // Redirecionar após 3 segundos
+            setTimeout(() => {
+              window.location.href = "index.html";
+            }, 3000);
+          } else {
+            errorDiv.textContent = data.error || "Erro ao cadastrar";
+            errorDiv.style.display = "block";
+          }
+        } catch (err) {
+          console.error("Erro:", err);
+          errorDiv.textContent = "Erro de conexão com o servidor";
+          errorDiv.style.display = "block";
+        }
+      }
     </script>
   </body>
 </html>

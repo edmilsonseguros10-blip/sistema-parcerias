@@ -12,35 +12,35 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middlewares
-if (process.env.NODE_ENV !== "production") {
-  app.use(helmet());
-}
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", "data:", "https:"],
+      },
+    },
+  }),
+);
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
 // Servir arquivos estáticos da pasta frontend
-// Serve arquivos estáticos da pasta 'frontend', funcionando localmente e no Render
-const frontendPath = path.join(
-  __dirname,
-  process.env.NODE_ENV === "production" ? "../../frontend" : "../frontend",
-);
-app.use(express.static(frontendPath));
-app.get("/teste", (req, res) => {
-  res.send("<h1>Teste OK! Servidor está respondendo rotas normais.</h1>");
-});
+app.use(express.static(path.join(__dirname, "../frontend")));
+
 // Rotas
 const authRoutes = require("./routes/auth.routes");
 const leadRoutes = require("./routes/lead.routes");
 const adminRoutes = require("./routes/admin.routes");
-const commissionRoutes = require("./routes/commission.routes"); // const commissionRoutes = require("./routes/commission.routes");
 const dashboardRoutes = require("./routes/dashboard.routes");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/leads", leadRoutes);
 app.use("/api/admin", adminRoutes);
-app.use("/api/commissions", commissionRoutes); // app.use("/api/commissions", commissionRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 
 // Health check
@@ -48,11 +48,16 @@ app.get("/api/health", (req, res) => {
   res.json({ status: "OK", message: "Servidor funcionando!" });
 });
 
+// Fallback para rotas não encontradas - serve o frontend
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/index.html"));
+});
+
 // Sincronizar banco
 sequelize
   .sync()
   .then(() => console.log("✅ Tabelas sincronizadas"))
-  .catch((err) => console.error("❌ Erro:", err));
+  .catch((err) => console.error("❌ Erro ao sincronizar:", err));
 
 sequelize
   .authenticate()
