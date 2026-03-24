@@ -12,18 +12,9 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middlewares
-app.use(
-  helmet({
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'"],
-        styleSrc: ["'self'", "'unsafe-inline'"],
-        imgSrc: ["'self'", "data:", "https:"],
-      },
-    },
-  }),
-);
+if (process.env.NODE_ENV !== "production") {
+  app.use(helmet());
+}
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
