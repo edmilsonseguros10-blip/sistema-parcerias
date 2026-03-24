@@ -36,7 +36,7 @@ app.get("/api/health", (req, res) => {
 });
 
 // Fallback para o frontend
-app.get("*", (req, res) => {
+app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/index.html"));
 });
 
