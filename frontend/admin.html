@@ -1,0 +1,1028 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Intent Corretora</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      :root {
+        --primary: #0f4c5c;
+        --secondary: #f97316;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --background: #f9fafb;
+        --card: #ffffff;
+        --text: #1f2937;
+        --text-light: #6b7280;
+        --border: #e5e7eb;
+      }
+
+      body {
+        background-color: var(--background);
+        color: var(--text);
+        min-height: 100vh;
+      }
+
+      .admin-header {
+        background: linear-gradient(135deg, var(--primary), #1a5f6e);
+        color: white;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 30px;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        border-bottom: 2px solid var(--border);
+        padding-bottom: 10px;
+      }
+
+      .tab {
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 6px 6px 0 0;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .tab:hover {
+        background-color: #f3f4f6;
+      }
+      .tab.active {
+        background-color: var(--primary);
+        color: white;
+      }
+
+      .tab-content {
+        display: none;
+      }
+      .tab-content.active {
+        display: block;
+      }
+
+      .filter-section {
+        background-color: var(--card);
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+      }
+
+      .action-btn {
+        padding: 6px 12px;
+        font-size: 14px;
+        margin: 0 5px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .btn-primary {
+        background-color: var(--primary);
+        color: white;
+      }
+      .btn-success {
+        background-color: var(--success);
+        color: white;
+      }
+      .btn-warning {
+        background-color: var(--warning);
+        color: white;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+
+      .stat-card {
+        background: linear-gradient(135deg, var(--primary), #1a5f6e);
+        color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .stat-card h3 {
+        font-size: 14px;
+        opacity: 0.9;
+        margin-bottom: 10px;
+      }
+      .stat-card .value {
+        font-size: 32px;
+        font-weight: 700;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: var(--card);
+        border-radius: 8px;
+        overflow-x: auto;
+        display: block;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      th {
+        background-color: var(--primary);
+        color: white;
+        padding: 12px;
+        text-align: left;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      td {
+        padding: 12px;
+        border-bottom: 1px solid var(--border);
+        white-space: nowrap;
+      }
+
+      tr:hover {
+        background-color: #f3f4f6;
+      }
+
+      .status-badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .status-active {
+        background-color: var(--success);
+        color: white;
+      }
+      .status-blocked {
+        background-color: var(--danger);
+        color: white;
+      }
+      .status-nova {
+        background-color: var(--warning);
+        color: white;
+      }
+      .status-em_contato {
+        background-color: var(--primary);
+        color: white;
+      }
+      .status-negociando {
+        background-color: var(--secondary);
+        color: white;
+      }
+      .status-contrato_fechado {
+        background-color: var(--success);
+        color: white;
+      }
+      .status-comissao_paga {
+        background-color: var(--success);
+        color: white;
+      }
+
+      .header {
+        background-color: var(--primary);
+        color: white;
+        padding: 15px 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .intent-logo {
+        display: flex;
+        align-items: center;
+      }
+      .intent-logo-text {
+        font-size: 20px;
+        font-weight: 600;
+        color: white;
+      }
+      .intent-logo-text span {
+        color: var(--secondary);
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .logout-btn {
+        background-color: transparent;
+        border: 1px solid white;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      .logout-btn:hover {
+        background-color: white;
+        color: var(--primary);
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .intent-footer {
+        margin-top: 30px;
+        padding: 20px;
+        text-align: center;
+        color: var(--text-light);
+        font-size: 12px;
+        border-top: 1px solid var(--border);
+      }
+      .intent-footer span {
+        color: var(--primary);
+        font-weight: 600;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+
+      .modal-content {
+        background-color: white;
+        padding: 30px;
+        border-radius: 12px;
+        max-width: 500px;
+        width: 90%;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+      }
+      .form-group input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+      }
+
+      .valor-destaque {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--secondary);
+      }
+
+      @media (max-width: 768px) {
+        th,
+        td {
+          padding: 8px;
+          font-size: 12px;
+        }
+        .stat-card .value {
+          font-size: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="header-content">
+        <div class="intent-logo">
+          <div style="font-size: 32px; margin-right: 10px">🛡️</div>
+          <span class="intent-logo-text">Intent <span>Admin</span></span>
+        </div>
+        <div class="user-info">
+          <span id="userName">Carregando...</span>
+          <button class="logout-btn" onclick="logout()">Sair</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="admin-header">
+        <h1>Painel Administrativo - Intent Corretora</h1>
+        <p>Gerencie parceiros, indicações e comissões</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3>Total Parceiros</h3>
+          <div class="value" id="totalParceiros">0</div>
+        </div>
+        <div
+          class="stat-card"
+          style="background: linear-gradient(135deg, var(--secondary), #e85d0e)"
+        >
+          <h3>Indicações</h3>
+          <div class="value" id="totalIndicacoes">0</div>
+        </div>
+        <div
+          class="stat-card"
+          style="background: linear-gradient(135deg, var(--success), #0e9f6e)"
+        >
+          <h3>Comissões Pendentes</h3>
+          <div class="value" id="comissoesPendentes">R$ 0</div>
+        </div>
+        <div
+          class="stat-card"
+          style="background: linear-gradient(135deg, var(--primary), #1e3a8a)"
+        >
+          <h3>Comissões Pagas</h3>
+          <div class="value" id="comissoesPagas">R$ 0</div>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <div class="tab active" onclick="mudarAba('parceiros')">Parceiros</div>
+        <div class="tab" onclick="mudarAba('indicacoes')">Indicações</div>
+        <div class="tab" onclick="mudarAba('comissoes')">Comissões</div>
+      </div>
+
+      <!-- ABA PARCEIROS -->
+      <div id="abaParceiros" class="tab-content active">
+        <div class="filter-section">
+          <div>
+            <label for="buscaParceiro">Buscar:</label>
+            <input
+              type="text"
+              id="buscaParceiro"
+              placeholder="Nome ou email"
+              onkeyup="filtrarParceiros()"
+            />
+          </div>
+          <div>
+            <label for="filtroNivel">Nível:</label>
+            <select id="filtroNivel" onchange="filtrarParceiros()">
+              <option value="">Todos</option>
+              <option value="bronze">Bronze</option>
+              <option value="prata">Prata</option>
+              <option value="ouro">Ouro</option>
+              <option value="diamante">Diamante</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="overflow-x: auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th>Cadastro</th>
+                <th>Último Acesso</th>
+                <th>Nível</th>
+                <th>Indicações</th>
+                <th>Contratos</th>
+                <th>Total Ganho</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="listaParceiros">
+              <tr>
+                <td colspan="11" style="text-align: center">
+                  Carregando parceiros...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ABA INDICAÇÕES -->
+      <div id="abaIndicacoes" class="tab-content">
+        <div class="filter-section">
+          <div>
+            <label for="filtroStatusIndicacao">Status:</label>
+            <select id="filtroStatusIndicacao" onchange="filtrarIndicacoes()">
+              <option value="">Todos</option>
+              <option value="nova">Nova</option>
+              <option value="em_contato">Em Contato</option>
+              <option value="negociando">Negociando</option>
+              <option value="contrato_fechado">Contrato Fechado</option>
+              <option value="comissao_paga">Comissão Paga</option>
+            </select>
+          </div>
+          <div>
+            <label for="filtroParceiroIndicacao">Parceiro:</label>
+            <select id="filtroParceiroIndicacao" onchange="filtrarIndicacoes()">
+              <option value="">Todos</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="overflow-x: auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>Telefone</th>
+                <th>WhatsApp</th>
+                <th>Parceiro</th>
+                <th>Tipo</th>
+                <th>Valor Contrato</th>
+                <th>Status</th>
+                <th>Data</th>
+                <th>Comissão</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="listaIndicacoesAdmin">
+              <tr>
+                <td colspan="10" style="text-align: center">
+                  Carregando indicações...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ABA COMISSÕES -->
+      <div id="abaComissoes" class="tab-content">
+        <div class="stats-grid" style="margin-bottom: 20px">
+          <div
+            class="card"
+            style="
+              background: white;
+              padding: 20px;
+              border-radius: 8px;
+              text-align: center;
+              box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            "
+          >
+            <h3>Total Pendente</h3>
+            <div class="valor-destaque" id="totalPendente">R$ 0</div>
+          </div>
+          <div
+            class="card"
+            style="
+              background: white;
+              padding: 20px;
+              border-radius: 8px;
+              text-align: center;
+              box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            "
+          >
+            <h3>Total Pago</h3>
+            <div class="valor-destaque" id="totalPago">R$ 0</div>
+          </div>
+          <div
+            class="card"
+            style="
+              background: white;
+              padding: 20px;
+              border-radius: 8px;
+              text-align: center;
+              box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            "
+          >
+            <h3>Total Geral</h3>
+            <div class="valor-destaque" id="totalGeral">R$ 0</div>
+          </div>
+        </div>
+
+        <div style="overflow-x: auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>Parceiro</th>
+                <th>Valor Contrato</th>
+                <th>Comissão (50%)</th>
+                <th>Status</th>
+                <th>Data</th>
+                <th>Chave PIX</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="listaComissoes">
+              <tr>
+                <td colspan="8" style="text-align: center">
+                  Carregando comissões...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="intent-footer">
+        <span>Intent Corretora de Seguros</span> • CNPJ: 38.215.690/0001-79 •
+        Todos os direitos reservados
+      </div>
+    </div>
+
+    <div id="modalFecharContrato" class="modal">
+      <div class="modal-content">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+          "
+        >
+          <h2 style="color: var(--primary)">Fechar Contrato</h2>
+          <span
+            onclick="fecharModal('modalFecharContrato')"
+            style="font-size: 24px; cursor: pointer"
+            >&times;</span
+          >
+        </div>
+        <div class="form-group">
+          <label>Valor do Contrato (R$)</label>
+          <input type="number" id="contract_value" step="0.01" min="0" />
+        </div>
+        <div class="form-group">
+          <label>Seguradora</label>
+          <input type="text" id="insurance_company" />
+        </div>
+        <div class="form-group">
+          <label>Nº Apólice</label>
+          <input type="text" id="policy_number" />
+        </div>
+        <div
+          style="
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+          "
+        >
+          <button
+            onclick="fecharModal('modalFecharContrato')"
+            style="
+              padding: 8px 16px;
+              background: var(--warning);
+              color: white;
+              border: none;
+              border-radius: 4px;
+            "
+          >
+            Cancelar
+          </button>
+          <button
+            onclick="salvarFechamento()"
+            style="
+              padding: 8px 16px;
+              background: var(--primary);
+              color: white;
+              border: none;
+              border-radius: 4px;
+            "
+          >
+            Fechar Contrato
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let leadAtual = null;
+
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (!user || user.role !== "admin") {
+        window.location.href = "index.html";
+      }
+
+      document.getElementById("userName").textContent = user.name;
+
+      function logout() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        window.location.href = "index.html";
+      }
+
+      function mudarAba(aba) {
+        document
+          .querySelectorAll(".tab")
+          .forEach((t) => t.classList.remove("active"));
+        document
+          .querySelectorAll(".tab-content")
+          .forEach((c) => c.classList.remove("active"));
+        event.target.classList.add("active");
+        document
+          .getElementById("aba" + aba.charAt(0).toUpperCase() + aba.slice(1))
+          .classList.add("active");
+        if (aba === "parceiros") carregarParceiros();
+        if (aba === "indicacoes") carregarIndicacoesAdmin();
+        if (aba === "comissoes") carregarComissoes();
+      }
+
+      function fecharModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+      }
+
+      async function carregarDashboardAdmin() {
+        try {
+          const response = await fetch(
+            "http://localhost:3001/api/admin/dashboard",
+            {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+            },
+          );
+          const data = await response.json();
+          if (response.ok) {
+            document.getElementById("totalParceiros").textContent =
+              data.resumo.totalParceiros;
+            document.getElementById("totalIndicacoes").textContent =
+              data.resumo.totalIndicacoes;
+            document.getElementById("comissoesPendentes").textContent =
+              "R$ " + data.resumo.comissoes.pendentes.toFixed(2);
+            document.getElementById("comissoesPagas").textContent =
+              "R$ " + data.resumo.comissoes.pagas.toFixed(2);
+          }
+        } catch (error) {
+          console.error("Erro ao carregar dashboard admin:", error);
+        }
+      }
+
+      async function carregarParceiros() {
+        try {
+          const response = await fetch(
+            "http://localhost:3001/api/admin/partners",
+            {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+            },
+          );
+          const parceiros = await response.json();
+
+          const tbody = document.getElementById("listaParceiros");
+          tbody.innerHTML = "";
+
+          parceiros.forEach((p) => {
+            const tr = document.createElement("tr");
+            const dataCadastro = p.created_at
+              ? new Date(p.created_at).toLocaleDateString("pt-BR")
+              : "-";
+            const ultimoAcesso = p.last_login
+              ? new Date(p.last_login).toLocaleDateString("pt-BR")
+              : "Nunca";
+            const nivelCor =
+              p.level === "bronze"
+                ? "#cd7f32"
+                : p.level === "prata"
+                  ? "#c0c0c0"
+                  : p.level === "ouro"
+                    ? "#ffd700"
+                    : "#b9f2ff";
+            const totalGanho = p.total_commission || 0;
+            console.log("Total ganho de", p.name, ":", totalGanho); // Para debug
+
+            tr.innerHTML = `
+                        <td>${p.name}</td>
+                        <td>${p.email}</td>
+                        <td>${p.phone}</td>
+                        <td>${dataCadastro}</td>
+                        <td>${ultimoAcesso}</td>
+                        <td><span style="background: ${nivelCor}; padding: 4px 8px; border-radius: 4px; color: white;">${p.level.toUpperCase()}</span></td>
+                        <td>${p.stats.totalLeads}</td>
+                        <td>${p.stats.contratos}</td>
+                        <td>R$ ${parseFloat(totalGanho).toFixed(2)}</td>
+                        <td><span class="status-badge ${p.status === "active" ? "status-active" : "status-blocked"}">${p.status === "active" ? "ATIVO" : "BLOQUEADO"}</span></td>
+                        <td>
+                            <button class="btn-primary action-btn" onclick="verParceiro(${p.id})">Ver</button>
+                            <button class="btn-warning action-btn" onclick="toggleStatus(${p.id}, '${p.status}')">${p.status === "active" ? "Bloquear" : "Ativar"}</button>
+                            ${p.phone ? `<a href="https://wa.me/55${p.phone.replace(/\D/g, "")}" target="_blank" class="btn-success action-btn" style="display: inline-block; text-decoration: none;">WhatsApp</a>` : ""}
+                        </td>
+                    `;
+            tbody.appendChild(tr);
+          });
+
+          const select = document.getElementById("filtroParceiroIndicacao");
+          if (select) {
+            select.innerHTML =
+              '<option value="">Todos</option>' +
+              parceiros
+                .map((p) => `<option value="${p.id}">${p.name}</option>`)
+                .join("");
+          }
+        } catch (error) {
+          console.error("Erro ao carregar parceiros:", error);
+          document.getElementById("listaParceiros").innerHTML =
+            '<tr><td colspan="11" style="text-align: center;">Erro ao carregar parceiros</td></tr>';
+        }
+      }
+
+      async function carregarIndicacoesAdmin() {
+        try {
+          const status =
+            document.getElementById("filtroStatusIndicacao")?.value || "";
+          const partnerId =
+            document.getElementById("filtroParceiroIndicacao")?.value || "";
+          let url = "http://localhost:3001/api/admin/leads";
+          const params = [];
+          if (status) params.push(`status=${status}`);
+          if (partnerId) params.push(`partner_id=${partnerId}`);
+          if (params.length) url += "?" + params.join("&");
+
+          const response = await fetch(url, {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          });
+          const indicacoes = await response.json();
+
+          const tbody = document.getElementById("listaIndicacoesAdmin");
+          tbody.innerHTML = "";
+
+          if (indicacoes.length === 0) {
+            tbody.innerHTML =
+              '<tr><td colspan="10" style="text-align: center;">Nenhuma indicação encontrada</td></tr>';
+            return;
+          }
+
+          indicacoes.forEach((ind) => {
+            const tr = document.createElement("tr");
+            const data = ind.created_at
+              ? new Date(ind.created_at).toLocaleDateString("pt-BR")
+              : "-";
+            const comissao = ind.commission_value
+              ? "R$ " + parseFloat(ind.commission_value).toFixed(2)
+              : "-";
+            const valorContrato = ind.contract_value
+              ? "R$ " + parseFloat(ind.contract_value).toFixed(2)
+              : "-";
+
+            tr.innerHTML = `
+                        <td>${ind.name}</td>
+                        <td>${ind.phone}</td>
+                        <td>${ind.whatsapp || "-"}</td>
+                        <td>${ind.User?.name || "-"}</td>
+                        <td>${ind.insurance_type || "-"}</td>
+                        <td>${valorContrato}</td>
+                        <td><span class="status-badge status-${ind.status}">${ind.status.replace("_", " ")}</span></td>
+                        <td>${data}</td>
+                        <td>${comissao}</td>
+                        <td>
+                            ${ind.status === "negociando" ? `<button class="btn-success action-btn" onclick="abrirFecharContrato(${ind.id})">Fechar</button>` : ""}
+                            <button class="btn-primary action-btn" onclick="verIndicacao(${ind.id})">Ver</button>
+                        </td>
+                    `;
+            tbody.appendChild(tr);
+          });
+        } catch (error) {
+          console.error("Erro ao carregar indicações:", error);
+        }
+      }
+
+      async function carregarComissoes() {
+        try {
+          const response = await fetch(
+            "http://localhost:3001/api/admin/commissions",
+            {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+            },
+          );
+          const data = await response.json();
+
+          document.getElementById("totalPendente").textContent =
+            "R$ " + data.summary.total_pending.toFixed(2);
+          document.getElementById("totalPago").textContent =
+            "R$ " + data.summary.total_paid.toFixed(2);
+          document.getElementById("totalGeral").textContent =
+            "R$ " + data.summary.total.toFixed(2);
+
+          const tbody = document.getElementById("listaComissoes");
+          tbody.innerHTML = "";
+
+          if (data.commissions.length === 0) {
+            tbody.innerHTML =
+              '<tr><td colspan="8" style="text-align: center;">Nenhuma comissão encontrada</td></tr>';
+            return;
+          }
+
+          data.commissions.forEach((com) => {
+            const tr = document.createElement("tr");
+            const dataStr = com.contract_date
+              ? new Date(com.contract_date).toLocaleDateString("pt-BR")
+              : "-";
+
+            tr.innerHTML = `
+                        <td>${com.name}</td>
+                        <td>${com.User?.name || "-"}</td>
+                        <td>R$ ${parseFloat(com.contract_value || 0).toFixed(2)}</td>
+                        <td>R$ ${parseFloat(com.commission_value || 0).toFixed(2)}</td>
+                        <td><span class="status-badge ${com.status === "contrato_fechado" ? "status-contrato_fechado" : "status-comissao_paga"}">${com.status === "contrato_fechado" ? "Pendente" : "Pago"}</span></td>
+                        <td>${dataStr}</td>
+                        <td>${com.User?.pix_key || "-"}</td>
+                        <td>${com.status === "contrato_fechado" ? `<button class="btn-success action-btn" onclick="pagarComissao(${com.id})">Pagar</button>` : ""}</td>
+                    `;
+            tbody.appendChild(tr);
+          });
+        } catch (error) {
+          console.error("Erro ao carregar comissões:", error);
+        }
+      }
+
+      function filtrarParceiros() {
+        const busca =
+          document.getElementById("buscaParceiro")?.value.toLowerCase() || "";
+        const nivel = document.getElementById("filtroNivel")?.value || "";
+        const linhas = document.querySelectorAll("#listaParceiros tr");
+
+        linhas.forEach((linha) => {
+          if (linha.cells.length > 1) {
+            const nome = linha.cells[0]?.textContent.toLowerCase() || "";
+            const email = linha.cells[1]?.textContent.toLowerCase() || "";
+            const nivelCelula = linha.cells[5]?.textContent.toLowerCase() || "";
+            const matchBusca = nome.includes(busca) || email.includes(busca);
+            const matchNivel = !nivel || nivelCelula === nivel;
+            linha.style.display = matchBusca && matchNivel ? "" : "none";
+          }
+        });
+      }
+
+      function filtrarIndicacoes() {
+        carregarIndicacoesAdmin();
+      }
+
+      async function verParceiro(id) {
+        try {
+          const response = await fetch(
+            `http://localhost:3001/api/admin/partners/${id}`,
+            {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+            },
+          );
+          if (response.ok) {
+            const data = await response.json();
+            alert(
+              `Nome: ${data.partner.name}\nEmail: ${data.partner.email}\nTelefone: ${data.partner.phone}\nCPF: ${data.partner.cpf}\nNível: ${data.partner.level}\nTotal Indicações: ${data.leads.length}`,
+            );
+          } else alert("Erro ao buscar parceiro");
+        } catch (error) {
+          alert("Erro de conexão");
+        }
+      }
+
+      async function verIndicacao(id) {
+        try {
+          const response = await fetch(
+            `http://localhost:3001/api/admin/leads/${id}`,
+            {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+            },
+          );
+          if (response.ok) {
+            const lead = await response.json();
+            alert(
+              `Cliente: ${lead.name}\nTelefone: ${lead.phone}\nWhatsApp: ${lead.whatsapp || "-"}\nTipo: ${lead.insurance_type || "-"}\nStatus: ${lead.status}\nObservações: ${lead.observations || "-"}`,
+            );
+          } else alert("Erro ao buscar indicação");
+        } catch (error) {
+          alert("Erro de conexão");
+        }
+      }
+
+      async function toggleStatus(id, statusAtual) {
+        const novoStatus = statusAtual === "active" ? "blocked" : "active";
+        const acao = novoStatus === "active" ? "ativar" : "bloquear";
+        if (confirm(`Tem certeza que deseja ${acao} este parceiro?`)) {
+          try {
+            const response = await fetch(
+              `http://localhost:3001/api/admin/partners/${id}/status`,
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+                body: JSON.stringify({ status: novoStatus }),
+              },
+            );
+            if (response.ok) {
+              alert(`Parceiro ${acao}do com sucesso!`);
+              carregarParceiros();
+            } else {
+              const data = await response.json();
+              alert("Erro: " + data.error);
+            }
+          } catch (error) {
+            alert("Erro de conexão");
+          }
+        }
+      }
+
+      function abrirFecharContrato(id) {
+        leadAtual = id;
+        document.getElementById("modalFecharContrato").style.display = "flex";
+      }
+
+      async function pagarComissao(id) {
+        if (confirm("Confirmar pagamento desta comissão?")) {
+          try {
+            const response = await fetch(
+              `http://localhost:3001/api/admin/commissions/${id}/pay`,
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+              },
+            );
+            if (response.ok) {
+              alert("Comissão marcada como paga!");
+              carregarComissoes();
+              carregarDashboardAdmin();
+            } else {
+              const data = await response.json();
+              alert("Erro: " + data.error);
+            }
+          } catch (error) {
+            alert("Erro de conexão");
+          }
+        }
+      }
+
+      async function salvarFechamento() {
+        const contract_value = document.getElementById("contract_value").value;
+        const insurance_company =
+          document.getElementById("insurance_company").value;
+        const policy_number = document.getElementById("policy_number").value;
+        if (!contract_value || !insurance_company || !policy_number) {
+          alert("Preencha todos os campos");
+          return;
+        }
+        try {
+          const response = await fetch(
+            `http://localhost:3001/api/admin/leads/${leadAtual}/close-contract`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+              body: JSON.stringify({
+                contract_value: parseFloat(contract_value),
+                insurance_company,
+                policy_number,
+              }),
+            },
+          );
+          if (response.ok) {
+            alert("Contrato fechado com sucesso! Comissão de 50% calculada.");
+            fecharModal("modalFecharContrato");
+            carregarIndicacoesAdmin();
+            carregarComissoes();
+            carregarDashboardAdmin();
+          } else {
+            const data = await response.json();
+            alert("Erro: " + data.error);
+          }
+        } catch (error) {
+          alert("Erro de conexão");
+        }
+      }
+
+      carregarDashboardAdmin();
+      carregarParceiros();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro - Intent Parceiros</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      :root {
+        --primary: #0f4c5c;
+        --secondary: #f97316;
+        --success: #10b981;
+        --background: #f9fafb;
+        --card: #ffffff;
+        --text: #1f2937;
+        --text-light: #6b7280;
+        --border: #e5e7eb;
+        --danger: #ef4444;
+      }
+
+      body {
+        background: linear-gradient(135deg, var(--primary), #1a5f6e);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .cadastro-card {
+        background-color: var(--card);
+        border-radius: 12px;
+        padding: 40px;
+        width: 100%;
+        max-width: 500px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      .logo {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .logo h1 {
+        color: var(--primary);
+        font-size: 28px;
+      }
+
+      .logo h1 span {
+        color: var(--secondary);
+      }
+
+      .logo p {
+        color: var(--text-light);
+        font-size: 14px;
+        margin-top: 5px;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+        color: var(--text);
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        font-size: 14px;
+      }
+
+      .form-group input:focus {
+        outline: none;
+        border-color: var(--primary);
+      }
+
+      .btn-cadastrar {
+        width: 100%;
+        padding: 12px;
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-top: 10px;
+      }
+
+      .btn-cadastrar:hover {
+        background-color: #1e3a8a;
+      }
+
+      .login-link {
+        text-align: center;
+        margin-top: 20px;
+        color: var(--text-light);
+        font-size: 14px;
+      }
+
+      .login-link a {
+        color: var(--secondary);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .login-link a:hover {
+        text-decoration: underline;
+      }
+
+      .error-message {
+        background-color: #fee2e2;
+        color: var(--danger);
+        padding: 10px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        text-align: center;
+        display: none;
+      }
+
+      .success-message {
+        background-color: #d1fae5;
+        color: #065f46;
+        padding: 10px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        text-align: center;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cadastro-card">
+      <div class="logo">
+        <h1>Parceiros <span>Intent</span></h1>
+        <p>Cadastre-se e comece a ganhar 50% de comissão</p>
+      </div>
+
+      <div id="error" class="error-message"></div>
+      <div id="success" class="success-message"></div>
+
+      <div class="form-group">
+        <label for="name">Nome completo *</label>
+        <input type="text" id="name" placeholder="Seu nome completo" required />
+      </div>
+
+      <div class="form-group">
+        <label for="email">E-mail *</label>
+        <input type="email" id="email" placeholder="seu@email.com" required />
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Telefone *</label>
+        <input type="text" id="phone" placeholder="(11) 99999-9999" required />
+      </div>
+
+      <div class="form-group">
+        <label for="cpf">CPF *</label>
+        <input type="text" id="cpf" placeholder="123.456.789-00" required />
+      </div>
+
+      <div class="form-group">
+        <label for="pix_key">Chave PIX *</label>
+        <input
+          type="text"
+          id="pix_key"
+          placeholder="email, CPF ou telefone"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Senha *</label>
+        <input type="password" id="password" placeholder="********" required />
+      </div>
+
+      <div class="form-group">
+        <label for="confirm_password">Confirmar senha *</label>
+        <input
+          type="password"
+          id="confirm_password"
+          placeholder="********"
+          required
+        />
+      </div>
+
+      <button class="btn-cadastrar" onclick="cadastrar()">Cadastrar</button>
+
+      <div class="login-link">
+        Já tem conta? <a href="index.html">Faça login</a>
+      </div>
+    </div>
+
+    <script>
+      async function cadastrar() {
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const phone = document.getElementById("phone").value;
+        const cpf = document.getElementById("cpf").value;
+        const pix_key = document.getElementById("pix_key").value;
+        const password = document.getElementById("password").value;
+        const confirm_password =
+          document.getElementById("confirm_password").value;
+
+        const errorDiv = document.getElementById("error");
+        const successDiv = document.getElementById("success");
+
+        errorDiv.style.display = "none";
+        successDiv.style.display = "none";
+
+        if (!name || !email || !phone || !cpf || !pix_key || !password) {
+          errorDiv.textContent = "Preencha todos os campos obrigatórios";
+          errorDiv.style.display = "block";
+          return;
+        }
+
+        if (password !== confirm_password) {
+          errorDiv.textContent = "As senhas não coincidem";
+          errorDiv.style.display = "block";
+          return;
+        }
+
+        if (password.length < 6) {
+          errorDiv.textContent = "A senha deve ter pelo menos 6 caracteres";
+          errorDiv.style.display = "block";
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            "http://localhost:3001/api/auth/register",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                name,
+                email,
+                phone,
+                cpf,
+                pix_key,
+                password,
+              }),
+            },
+          );
+
+          const data = await response.json();
+
+          if (response.ok) {
+            successDiv.textContent =
+              "✅ Cadastro realizado com sucesso! Faça login para acessar sua área.";
+            successDiv.style.display = "block";
+
+            // Limpar formulário
+            document.getElementById("name").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("phone").value = "";
+            document.getElementById("cpf").value = "";
+            document.getElementById("pix_key").value = "";
+            document.getElementById("password").value = "";
+            document.getElementById("confirm_password").value = "";
+
+            // Redirecionar após 3 segundos
+            setTimeout(() => {
+              window.location.href = "index.html";
+            }, 3000);
+          } else {
+            errorDiv.textContent = data.error || "Erro ao cadastrar";
+            errorDiv.style.display = "block";
+          }
+        } catch (err) {
+          errorDiv.textContent =
+            "Erro de conexão com o servidor. Verifique se o backend está rodando.";
+          errorDiv.style.display = "block";
+        }
+      }
+    </script>
+  </body>
+</html>

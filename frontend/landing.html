@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Intent Parceiros - Ganhe 50% indicando seguros</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      :root {
+        --primary: #0f4c5c;
+        --secondary: #f97316;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --background: #f9fafb;
+        --card: #ffffff;
+        --text: #1f2937;
+        --text-light: #6b7280;
+        --border: #e5e7eb;
+      }
+
+      body {
+        background-color: var(--background);
+        color: var(--text);
+      }
+
+      /* HEADER */
+      .header {
+        background-color: var(--primary);
+        color: white;
+        padding: 15px 0;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .header-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 24px;
+        font-weight: 700;
+      }
+      .logo span {
+        color: var(--secondary);
+      }
+
+      .nav a {
+        color: white;
+        text-decoration: none;
+        margin-left: 30px;
+        transition: opacity 0.3s;
+        font-size: 14px;
+      }
+      .nav a:hover {
+        opacity: 0.8;
+      }
+
+      .btn-nav {
+        background-color: var(--secondary);
+        padding: 8px 20px;
+        border-radius: 6px;
+      }
+
+      /* HERO SECTION COM IMAGEM DE FUNDO */
+      .hero {
+        background:
+          linear-gradient(
+            135deg,
+            rgba(15, 76, 92, 0.85),
+            rgba(26, 95, 110, 0.85)
+          ),
+          url("assets/fundo.jpg");
+        background-size: cover;
+        background-position: center;
+        color: white;
+        text-align: center;
+        padding: 120px 20px 80px;
+        margin-top: 70px;
+      }
+
+      .hero h1 {
+        font-size: 48px;
+        margin-bottom: 20px;
+      }
+
+      .hero p {
+        font-size: 18px;
+        max-width: 600px;
+        margin: 0 auto 30px;
+        opacity: 0.9;
+      }
+
+      .btn-primary {
+        background-color: var(--secondary);
+        color: white;
+        padding: 14px 40px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-block;
+        transition: transform 0.3s;
+        font-size: 16px;
+      }
+      .btn-primary:hover {
+        transform: scale(1.05);
+      }
+
+      /* STATS SECTION */
+      .stats-section {
+        max-width: 1200px;
+        margin: -40px auto 0;
+        padding: 0 20px;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 20px;
+        background: var(--card);
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .stat-card {
+        text-align: center;
+        padding: 15px;
+        border-right: 1px solid var(--border);
+      }
+      .stat-card:last-child {
+        border-right: none;
+      }
+
+      .stat-number {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--primary);
+      }
+
+      .stat-label {
+        font-size: 12px;
+        color: var(--text-light);
+        margin-top: 5px;
+      }
+
+      .stat-badge {
+        font-size: 12px;
+        color: var(--text-light);
+        margin-top: 5px;
+      }
+
+      /* CONTAINER */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 60px 20px;
+      }
+
+      /* BENEFÍCIOS */
+      .section-title {
+        text-align: center;
+        font-size: 32px;
+        margin-bottom: 15px;
+        color: var(--primary);
+      }
+
+      .section-subtitle {
+        text-align: center;
+        color: var(--text-light);
+        margin-bottom: 40px;
+        font-size: 16px;
+      }
+
+      .benefits-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+      }
+
+      .benefit-card {
+        background: var(--card);
+        padding: 30px;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+      }
+      .benefit-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .benefit-icon {
+        font-size: 48px;
+        margin-bottom: 15px;
+      }
+      .benefit-card h3 {
+        margin-bottom: 10px;
+        color: var(--primary);
+      }
+      .benefit-card p {
+        color: var(--text-light);
+        font-size: 14px;
+      }
+
+      /* COMO FUNCIONA */
+      .steps-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 30px;
+      }
+
+      .step-card {
+        text-align: center;
+        padding: 20px;
+      }
+
+      .step-number {
+        width: 50px;
+        height: 50px;
+        background: var(--secondary);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0 auto 20px;
+      }
+
+      .step-card h3 {
+        margin-bottom: 10px;
+        color: var(--primary);
+      }
+      .step-card p {
+        color: var(--text-light);
+        font-size: 14px;
+      }
+
+      /* TIPOS DE SEGURO */
+      .insurance-grid {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        gap: 20px;
+        text-align: center;
+      }
+
+      .insurance-item {
+        background: var(--card);
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+      }
+      .insurance-item:hover {
+        transform: translateY(-3px);
+      }
+
+      .insurance-icon {
+        font-size: 32px;
+        margin-bottom: 10px;
+      }
+      .insurance-name {
+        font-weight: 600;
+        color: var(--primary);
+        font-size: 14px;
+      }
+
+      /* CTA FINAL */
+      .cta {
+        background: linear-gradient(135deg, var(--primary), #1a5f6e);
+        color: white;
+        text-align: center;
+        padding: 60px 20px;
+      }
+
+      .cta h2 {
+        font-size: 32px;
+        margin-bottom: 15px;
+      }
+      .cta p {
+        margin-bottom: 30px;
+        opacity: 0.9;
+      }
+
+      /* FOOTER */
+      .footer {
+        background-color: #1f2937;
+        color: #9ca3af;
+        padding: 40px 20px;
+        text-align: center;
+        font-size: 12px;
+      }
+
+      .footer p {
+        margin-bottom: 10px;
+      }
+
+      @media (max-width: 1024px) {
+        .stats-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .steps-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .insurance-grid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 32px;
+        }
+        .nav {
+          display: none;
+        }
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .steps-grid {
+          grid-template-columns: 1fr;
+        }
+        .insurance-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="header-content">
+        <div class="logo">Intent <span>Parceiros</span></div>
+        <div class="nav">
+          <a href="#como-funciona">Como Funciona</a>
+          <a href="#beneficios">Benefícios</a>
+          <a href="#seguros">Seguros</a>
+          <a href="index.html">Entrar</a>
+          <a href="cadastro.html" class="btn-nav">Cadastrar</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero">
+      <h1>Ganhe dinheiro indicando seguros</h1>
+      <p>
+        Cadastre-se, aprenda sobre seguros e indique pessoas. A cada contrato
+        fechado, você recebe <strong>50% da comissão via PIX</strong>.
+      </p>
+      <a href="cadastro.html" class="btn-primary">Começar Agora — É Grátis</a>
+    </div>
+
+    <div class="stats-section">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">R$ 4.500</div>
+          <div class="stat-label">Total Ganho</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">12</div>
+          <div class="stat-label">Indicações</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">5</div>
+          <div class="stat-label">Convertidas</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">R$ 2.900</div>
+          <div class="stat-label">Pendentes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">Prata</div>
+          <div class="stat-label">Nível</div>
+          <div class="stat-badge">8/15 pontos</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="como-funciona" class="container">
+      <h2 class="section-title">Como Funciona</h2>
+      <p class="section-subtitle">
+        Em 4 passos simples, você começa a ganhar dinheiro
+      </p>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3>Cadastre-se</h3>
+          <p>Crie sua conta gratuitamente</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3>Aprenda</h3>
+          <p>Acesse nossa central de aprendizado</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3>Indique</h3>
+          <p>Registre suas indicações</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">4</div>
+          <h3>Ganhe</h3>
+          <p>Receba 50% via PIX</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="beneficios" class="container" style="background-color: #f3f4f6">
+      <h2 class="section-title">Por que ser um Parceiro?</h2>
+      <p class="section-subtitle">
+        Benefícios exclusivos para quem faz parte do nosso programa
+      </p>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">💰</div>
+          <h3>50% de Comissão</h3>
+          <p>Metade do valor da comissão direto no seu PIX</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">⚡</div>
+          <h3>Renda Extra</h3>
+          <p>Ganhe dinheiro no seu tempo, sem horário fixo</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">📚</div>
+          <h3>Capacitação Grátis</h3>
+          <p>Aprenda tudo sobre seguros na nossa plataforma</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🛡️</div>
+          <h3>Suporte Técnico</h3>
+          <p>Nossa equipe de especialistas cuida das negociações</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🎯</div>
+          <h3>Sem Risco</h3>
+          <p>Cadastro gratuito, sem investimento inicial</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🏆</div>
+          <h3>Gamificação</h3>
+          <p>Suba de nível e desbloqueie benefícios exclusivos</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="seguros" class="container">
+      <h2 class="section-title">Tipos de Seguros</h2>
+      <p class="section-subtitle">
+        Oferecemos uma linha completa de seguros para atender todas as
+        necessidades
+      </p>
+      <div class="insurance-grid">
+        <div class="insurance-item">
+          <div class="insurance-icon">🚗</div>
+          <div class="insurance-name">Auto</div>
+        </div>
+        <div class="insurance-item">
+          <div class="insurance-icon">💙</div>
+          <div class="insurance-name">Vida</div>
+        </div>
+        <div class="insurance-item">
+          <div class="insurance-icon">🏠</div>
+          <div class="insurance-name">Residencial</div>
+        </div>
+        <div class="insurance-item">
+          <div class="insurance-icon">🏢</div>
+          <div class="insurance-name">Empresarial</div>
+        </div>
+        <div class="insurance-item">
+          <div class="insurance-icon">🩺</div>
+          <div class="insurance-name">Saúde</div>
+        </div>
+        <div class="insurance-item">
+          <div class="insurance-icon">✈️</div>
+          <div class="insurance-name">Viagem</div>
+        </div>
+        <div class="insurance-item">
+          <div class="insurance-icon">🐱</div>
+          <div class="insurance-name">Pet</div>
+        </div>
+        <div class="insurance-item">
+          <div class="insurance-icon">🏢</div>
+          <div class="insurance-name">Condomínio</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta">
+      <h2>Pronto para começar?</h2>
+      <p>Cadastre-se gratuitamente e comece a ganhar comissões hoje mesmo.</p>
+      <a href="cadastro.html" class="btn-primary">Criar Minha Conta Grátis</a>
+    </div>
+
+    <div class="footer">
+      <p>
+        <strong>Intent Corretora de Seguros</strong> • CNPJ: 38.215.690/0001-79
+      </p>
+      <p>contato@intentcorretora.com • (11) 3000-0000 • São Paulo, SP</p>
+      <p>© 2024 Intent Corretora. Todos os direitos reservados.</p>
+    </div>
+  </body>
+</html>

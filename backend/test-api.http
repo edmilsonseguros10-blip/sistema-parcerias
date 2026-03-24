@@ -1,0 +1,86 @@
+### Health Check
+GET http://localhost:3001/api/health
+
+### Cadastro de parceiro
+POST http://localhost:3001/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Maria Souza",
+  "email": "maria@email.com",
+  "password": "123456",
+  "phone": "(11) 98888-7777",
+  "cpf": "987.654.321-00",
+  "pix_key": "maria@email.com"
+}
+
+### Criar nova indicação
+POST http://localhost:3001/api/leads
+Content-Type: application/json
+
+{
+  "name": "Carlos Cliente",
+  "phone": "(11) 98888-7777",
+  "email": "carlos@email.com",
+  "insurance_type": "auto",
+  "observations": "Interessado em seguro completo"
+}
+
+### Listar todas as indicações
+GET http://localhost:3001/api/leads
+
+### ADMIN: Fechar contrato (substitua 1 pelo ID da lead)
+PUT http://localhost:3001/api/admin/leads/1/close-contract
+Content-Type: application/json
+
+{
+  "contract_value": 2500.00,
+  "insurance_company": "SulAmérica",
+  "policy_number": "POL123456"
+}
+
+### ADMIN: Listar todas as comissões
+GET http://localhost:3001/api/admin/commissions
+
+### ADMIN: Marcar comissão como paga (substitua 1 pelo ID)
+PUT http://localhost:3001/api/admin/commissions/1/pay
+
+### ADMIN: Fechar contrato (substitua 1 pelo ID da lead)
+PUT http://localhost:3001/api/admin/leads/1/close-contract
+Content-Type: application/json
+
+{
+  "contract_value": 2500.00,
+  "insurance_company": "SulAmérica",
+  "policy_number": "POL123456"
+}
+
+### ADMIN: Listar todas as comissões
+GET http://localhost:3001/api/admin/commissions
+
+### ADMIN: Marcar comissão como paga (substitua 1 pelo ID)
+PUT http://localhost:3001/api/admin/commissions/1/pay
+
+
+### ADMIN: Dashboard
+GET http://localhost:3001/api/admin/dashboard
+
+### ADMIN: Listar todos os parceiros
+GET http://localhost:3001/api/admin/partners
+
+### ADMIN: Ver detalhe de um parceiro (substitua 2 pelo ID)
+GET http://localhost:3001/api/admin/partners/2
+
+### ADMIN: Bloquear/ativar parceiro (substitua 2 pelo ID)
+PUT http://localhost:3001/api/admin/partners/2/status
+Content-Type: application/json
+
+{
+  "status": "blocked"
+}
+
+### ADMIN: Listar todas as indicações com filtros
+GET http://localhost:3001/api/admin/leads?status=nova
+
+### ADMIN: Listar indicações de um parceiro específico
+GET http://localhost:3001/api/admin/leads?partner_id=2

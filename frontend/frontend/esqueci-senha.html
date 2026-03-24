@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recuperar Senha - Intent</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+      body {
+        background: linear-gradient(135deg, #0f4c5c, #1a5f6e);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .card {
+        background: white;
+        padding: 40px;
+        border-radius: 12px;
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+      }
+      h1 {
+        color: #0f4c5c;
+        margin-bottom: 10px;
+      }
+      h1 span {
+        color: #f97316;
+      }
+      p {
+        color: #6b7280;
+        margin-bottom: 30px;
+      }
+      input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 20px;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+      }
+      button {
+        width: 100%;
+        padding: 12px;
+        background: #0f4c5c;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      button:hover {
+        background: #1e3a8a;
+      }
+      a {
+        display: block;
+        margin-top: 20px;
+        color: #6b7280;
+        text-decoration: none;
+      }
+      a:hover {
+        color: #f97316;
+      }
+      .message {
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 6px;
+        display: none;
+      }
+      .success {
+        background: #d1fae5;
+        color: #065f46;
+      }
+      .error {
+        background: #fee2e2;
+        color: #ef4444;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>Recuperar <span>Senha</span></h1>
+      <p>Digite seu e-mail para receber as instruções</p>
+      <div id="message" class="message"></div>
+      <input type="email" id="email" placeholder="seu@email.com" />
+      <button onclick="enviar()">Enviar Instruções</button>
+      <a href="index.html">← Voltar para o login</a>
+    </div>
+    <script>
+      async function enviar() {
+        const email = document.getElementById("email").value;
+        const msg = document.getElementById("message");
+        msg.style.display = "none";
+        if (!email) {
+          msg.textContent = "Digite seu e-mail";
+          msg.className = "message error";
+          msg.style.display = "block";
+          return;
+        }
+        try {
+          const res = await fetch(
+            "http://localhost:3001/api/auth/forgot-password",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email }),
+            },
+          );
+          const data = await res.json();
+          if (res.ok) {
+            msg.textContent = "Instruções enviadas para seu e-mail!";
+            msg.className = "message success";
+            msg.style.display = "block";
+            document.getElementById("email").value = "";
+          } else {
+            msg.textContent = data.error || "Erro ao enviar";
+            msg.className = "message error";
+            msg.style.display = "block";
+          }
+        } catch {
+          msg.textContent = "Erro de conexão";
+          msg.className = "message error";
+          msg.style.display = "block";
+        }
+      }
+    </script>
+  </body>
+</html>
