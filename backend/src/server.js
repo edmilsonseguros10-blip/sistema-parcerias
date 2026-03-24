@@ -19,7 +19,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
 // Servir arquivos estáticos da pasta frontend
-app.use(express.static(path.join(__dirname, "../frontend")));
+// Serve arquivos estáticos da pasta 'frontend', funcionando localmente e no Render
+const frontendPath = path.join(
+  __dirname,
+  process.env.NODE_ENV === "production" ? "../../frontend" : "../frontend",
+);
+app.use(express.static(frontendPath));
 app.get("/teste", (req, res) => {
   res.send("<h1>Teste OK! Servidor está respondendo rotas normais.</h1>");
 });
