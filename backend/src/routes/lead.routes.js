@@ -1,19 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const { Lead, User } = require("../models");
+const { Lead } = require("../models");
 
-// Middleware de autenticação (simulado)
 const authMiddleware = (req, res, next) => {
-  req.userId = 2; // ID da Maria
+  req.userId = 1;
   next();
 };
 
-// Criar uma nova indicação
 router.post("/", authMiddleware, async (req, res) => {
   try {
     const { name, phone, whatsapp, email, insurance_type, observations } =
       req.body;
-
     const lead = await Lead.create({
       user_id: req.userId,
       name,
@@ -24,7 +21,6 @@ router.post("/", authMiddleware, async (req, res) => {
       observations,
       status: "nova",
     });
-
     res.status(201).json(lead);
   } catch (error) {
     console.error(error);
@@ -32,7 +28,6 @@ router.post("/", authMiddleware, async (req, res) => {
   }
 });
 
-// Listar todas as indicações do parceiro logado
 router.get("/", authMiddleware, async (req, res) => {
   try {
     const leads = await Lead.findAll({
@@ -46,20 +41,13 @@ router.get("/", authMiddleware, async (req, res) => {
   }
 });
 
-// Buscar uma indicação específica
 router.get("/:id", authMiddleware, async (req, res) => {
   try {
     const lead = await Lead.findOne({
-      where: {
-        id: req.params.id,
-        user_id: req.userId,
-      },
+      where: { id: req.params.id, user_id: req.userId },
     });
-
-    if (!lead) {
+    if (!lead)
       return res.status(404).json({ error: "Indicação não encontrada" });
-    }
-
     res.json(lead);
   } catch (error) {
     console.error(error);
@@ -67,25 +55,16 @@ router.get("/:id", authMiddleware, async (req, res) => {
   }
 });
 
-// Atualizar status de uma indicação
 router.put("/:id", authMiddleware, async (req, res) => {
   try {
     const { status } = req.body;
-
     const lead = await Lead.findOne({
-      where: {
-        id: req.params.id,
-        user_id: req.userId,
-      },
+      where: { id: req.params.id, user_id: req.userId },
     });
-
-    if (!lead) {
+    if (!lead)
       return res.status(404).json({ error: "Indicação não encontrada" });
-    }
-
     lead.status = status;
     await lead.save();
-
     res.json(lead);
   } catch (error) {
     console.error(error);
