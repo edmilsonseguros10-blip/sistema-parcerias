@@ -63,7 +63,6 @@ router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Busca usuário pelo email
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
@@ -78,9 +77,7 @@ router.post("/login", async (req, res) => {
         });
     }
 
-    // Verifica senha
     const validPassword = await user.checkPassword(password);
-
     if (!validPassword) {
       return res.status(401).json({ error: "Senha inválida" });
     }
@@ -89,12 +86,12 @@ router.post("/login", async (req, res) => {
     user.last_login = new Date();
     await user.save();
 
-    // Gera um token simples
+    // Gerar token simples (pode ser substituído por JWT depois)
     const token = crypto.randomBytes(32).toString("hex");
 
     res.json({
       message: "Login realizado com sucesso",
-      token: token,
+      token,
       user: {
         id: user.id,
         name: user.name,
