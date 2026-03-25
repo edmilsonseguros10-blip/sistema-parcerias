@@ -4,6 +4,7 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
 const path = require("path");
+const fs = require("fs");
 const sequelize = require("./config/database");
 
 dotenv.config();
@@ -29,12 +30,28 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
-// Servir arquivos estáticos da pasta frontend
-app.use(express.static(path.join(__dirname, "../frontend")));
+// Determinar o caminho correto para a pasta frontend
+const frontendPath = path.join(__dirname, "../frontend");
+console.log("Servindo arquivos de:", frontendPath);
+
+// Verificar se a pasta existe
+if (!fs.existsSync(frontendPath)) {
+  console.error("❌ PASTA FRONTEND NÃO ENCONTRADA:", frontendPath);
+} else {
+  console.log("✅ Pasta frontend encontrada");
+}
+
+// Servir arquivos estáticos
+app.use(express.static(frontendPath));
 
 // Rota explícita para a raiz
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/index.html"));
+  const indexPath = path.join(frontendPath, "index.html");
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    res.status(404).send("Arquivo index.html não encontrado");
+  }
 });
 
 // Rotas da API
@@ -67,5 +84,5 @@ sequelize
 // Iniciar servidor
 app.listen(PORT, () => {
   console.log(`🚀 Servidor rodando na porta ${PORT}`);
-  console.log(`🌐 Frontend: http://localhost:${PORT}/index.html`);
+  console.log(`🌐 Frontend: http://localhost:${PORT}/`);
 });
