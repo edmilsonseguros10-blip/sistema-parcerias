@@ -31,7 +31,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
 // Determinar o caminho correto para a pasta frontend
-const frontendPath = path.join(__dirname, "../frontend");
+const frontendPath = path.join(__dirname, "../../frontend");
 console.log("Servindo arquivos de:", frontendPath);
 
 // Verificar se a pasta existe
