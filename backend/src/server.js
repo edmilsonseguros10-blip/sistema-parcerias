@@ -32,6 +32,11 @@ app.use(morgan("dev"));
 // Servir arquivos estáticos da pasta frontend
 app.use(express.static(path.join(__dirname, "../frontend")));
 
+// Rota explícita para a raiz
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/index.html"));
+});
+
 // Rotas da API
 const authRoutes = require("./routes/auth.routes");
 const leadRoutes = require("./routes/lead.routes");
