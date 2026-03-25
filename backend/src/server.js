@@ -29,9 +29,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
-// CAMINHO CORRETO: frontend na RAIZ do projeto
-const frontendPath = path.join(__dirname, "../frontend");
-console.log("📁 Servindo frontend de:", frontendPath);
+// DIAGNÓSTICO: listar arquivos na pasta raiz
+const rootPath = path.join(__dirname, "../..");
+console.log("📁 Pasta raiz:", rootPath);
+console.log("📁 Conteúdo da raiz:", fs.readdirSync(rootPath));
+
+// Caminho para frontend
+const frontendPath = path.join(rootPath, "frontend");
+console.log("📁 Pasta frontend:", frontendPath);
+
+if (fs.existsSync(frontendPath)) {
+  console.log("✅ Pasta frontend encontrada!");
+  console.log("📁 Conteúdo:", fs.readdirSync(frontendPath));
+} else {
+  console.log("❌ PASTA FRONTEND NÃO ENCONTRADA!");
+}
 
 app.use(express.static(frontendPath));
 
@@ -40,7 +52,7 @@ app.get("/", (req, res) => {
   if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath);
   } else {
-    res.status(404).send("index.html não encontrado");
+    res.status(404).send(`index.html não encontrado em: ${indexPath}`);
   }
 });
 
@@ -71,5 +83,4 @@ sequelize
 
 app.listen(PORT, () => {
   console.log(`🚀 Servidor rodando na porta ${PORT}`);
-  console.log(`🌐 Frontend: http://localhost:${PORT}/`);
 });
