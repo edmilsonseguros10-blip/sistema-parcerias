@@ -3,7 +3,7 @@ const router = express.Router();
 const { Lead } = require("../models");
 
 const authMiddleware = (req, res, next) => {
-  req.userId = 1;
+  req.userId = 2; // ← AGORA É A MARIA (ID 2)
   next();
 };
 
