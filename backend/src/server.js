@@ -12,6 +12,7 @@ const PORT = process.env.PORT || 3001;
 // Middlewares
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Servir arquivos estáticos da pasta frontend
 app.use(express.static(path.join(__dirname, "../../frontend")));
@@ -27,10 +28,25 @@ app.use("/api/leads", leadRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 
-// Rota de teste
+// Health check
 app.get("/api/health", (req, res) => {
   res.json({ status: "OK", message: "Servidor funcionando!" });
 });
+
+// ========== ENDPOINT PARA CRIAR TABELAS ==========
+app.get("/api/sync", async (req, res) => {
+  try {
+    await sequelize.sync({ force: true });
+    res.json({
+      message: "✅ Tabelas recriadas com sucesso!",
+      tables: ["users", "leads"],
+    });
+  } catch (error) {
+    console.error("Erro ao sincronizar:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+// =================================================
 
 // Testar banco
 sequelize
