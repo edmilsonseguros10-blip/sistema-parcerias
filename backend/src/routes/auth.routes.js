@@ -1,22 +1,18 @@
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const { User } = require("../models");
 
-// Rota de cadastro (registro)
+// CADASTRO - senha em texto puro
 router.post("/register", async (req, res) => {
   try {
     const { name, email, phone, cpf, pix_key, password } = req.body;
 
-    // Verificar se usuário já existe
     const userExists = await User.findOne({ where: { email } });
-
     if (userExists) {
       return res.status(400).json({ error: "E-mail já cadastrado" });
     }
 
-    // Gerar código de indicação único
     let referral_code;
     let codeExists = true;
     while (codeExists) {
@@ -25,22 +21,13 @@ router.post("/register", async (req, res) => {
       codeExists = !!existing;
     }
 
-    // Criar hash da senha
-    const password_hash = await bcrypt.hash(password, 10);
-    console.log("Hash gerado:", password_hash); // Log para debug
-
-    // Criar usuário no banco
+    // SENHA EM TEXTO PURO
     const user = await User.create({
-      name,
-      email,
-      phone,
-      cpf,
-      pix_key,
-      password_hash,
+      name, email, phone, cpf, pix_key,
+      password_hash: password,
       referral_code,
     });
 
-    // Retornar usuário criado
     res.status(201).json({
       id: user.id,
       name: user.name,
@@ -51,7 +38,6 @@ router.post("/register", async (req, res) => {
       role: user.role,
       level: user.level,
       referral_code: user.referral_code,
-      created_at: user.created_at,
     });
   } catch (error) {
     console.error("Erro no cadastro:", error);
@@ -59,7 +45,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// Rota de login
+// LOGIN - comparação direta
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -71,24 +57,17 @@ router.post("/login", async (req, res) => {
     }
 
     if (user.status !== "active") {
-      return res.status(401).json({
-        error: "Usuário bloqueado. Entre em contato com o administrador.",
-      });
+      return res.status(401).json({ error: "Usuário bloqueado" });
     }
 
-    console.log("Hash no banco:", user.password_hash); // Log para debug
-    const validPassword = await bcrypt.compare(password, user.password_hash);
-    console.log("Senha válida?", validPassword); // Log para debug
-
-    if (!validPassword) {
+    // COMPARAÇÃO DIRETA
+    if (user.password_hash !== password) {
       return res.status(401).json({ error: "Senha inválida" });
     }
 
-    // Atualizar último acesso
     user.last_login = new Date();
     await user.save();
 
-    // Gerar token simples
     const token = crypto.randomBytes(32).toString("hex");
 
     res.json({
