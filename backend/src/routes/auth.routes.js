@@ -58,7 +58,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// Rota de login
+// Rota de login (CORRIGIDA)
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -70,14 +70,13 @@ router.post("/login", async (req, res) => {
     }
 
     if (user.status !== "active") {
-      return res
-        .status(401)
-        .json({
-          error: "Usuário bloqueado. Entre em contato com o administrador.",
-        });
+      return res.status(401).json({
+        error: "Usuário bloqueado. Entre em contato com o administrador.",
+      });
     }
 
-    const validPassword = await user.checkPassword(password);
+    // CORREÇÃO: usar bcrypt.compare diretamente
+    const validPassword = await bcrypt.compare(password, user.password_hash);
     if (!validPassword) {
       return res.status(401).json({ error: "Senha inválida" });
     }
@@ -86,7 +85,7 @@ router.post("/login", async (req, res) => {
     user.last_login = new Date();
     await user.save();
 
-    // Gerar token simples (pode ser substituído por JWT depois)
+    // Gerar token simples
     const token = crypto.randomBytes(32).toString("hex");
 
     res.json({
