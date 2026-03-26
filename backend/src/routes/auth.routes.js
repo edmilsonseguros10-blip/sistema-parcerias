@@ -27,6 +27,7 @@ router.post("/register", async (req, res) => {
 
     // Criar hash da senha
     const password_hash = await bcrypt.hash(password, 10);
+    console.log("Hash gerado:", password_hash); // Log para debug
 
     // Criar usuário no banco
     const user = await User.create({
@@ -58,7 +59,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// Rota de login (CORRIGIDA)
+// Rota de login
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -75,8 +76,10 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    // CORREÇÃO: usar bcrypt.compare diretamente
+    console.log("Hash no banco:", user.password_hash); // Log para debug
     const validPassword = await bcrypt.compare(password, user.password_hash);
+    console.log("Senha válida?", validPassword); // Log para debug
+
     if (!validPassword) {
       return res.status(401).json({ error: "Senha inválida" });
     }
